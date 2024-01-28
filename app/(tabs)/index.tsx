@@ -1,7 +1,7 @@
 import React from "react";
 import styled from 'styled-components/native';
 import { Link } from 'expo-router';
-
+import { Image } from "react-native";
 import AntDesign  from 'react-native-vector-icons/AntDesign'
 
 
@@ -19,10 +19,16 @@ export default function LoginPage() {
     const [textEmail, onChangeText] = React.useState('');
     const [textPass, onChangeNumber] = React.useState('');
 
+    const style = {
+        height: "auto",
+        width: "36px"
+    }
+
     name = textEmail;
     return (
         <MainContainer>
             <TitleContainer>
+                <Logo source={ require("../../assets/images/Frame_3.png") } />
                 <Text>Nos Album</Text>
             </TitleContainer>
 
@@ -165,7 +171,12 @@ const TextOR = styled.Text`
     font-size: 20px;
 `
 
-
+const Logo = styled.Image`
+    position: absolute;
+    top: 48px;
+    height: 124px;
+    width: 124px;
+`
 const MasterButtonsLogo = styled.View` 
     display: flex;
     flex-direction: row;

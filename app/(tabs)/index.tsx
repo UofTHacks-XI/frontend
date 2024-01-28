@@ -8,6 +8,9 @@ import AntDesign  from 'react-native-vector-icons/AntDesign'
 import {StyleSheet, TextInput} from 'react-native';
 // import { useRootNavigationState, Redirect } from "expo-router";
 
+
+
+let name = ''; 
 export default function LoginPage() {
     // const rootNavigationState = useRootNavigationState();
 
@@ -16,6 +19,7 @@ export default function LoginPage() {
     const [textEmail, onChangeText] = React.useState('');
     const [textPass, onChangeNumber] = React.useState('');
 
+    name = textEmail;
     return (
         <MainContainer>
             <TitleContainer>
@@ -26,7 +30,7 @@ export default function LoginPage() {
                 style={styles.input}
                 onChangeText={onChangeText}
                 value={textEmail}
-                placeholder="Email"
+                placeholder="Name"
                 placeholderTextColor={'black'}
             />
             <TextInput
@@ -35,7 +39,6 @@ export default function LoginPage() {
                 value={textPass}
                 placeholder="Password"
                 placeholderTextColor={'black'}
-                keyboardType="numeric"
             />
 
             <MasterButtons>
@@ -170,3 +173,5 @@ const MasterButtonsLogo = styled.View`
     gap: 100%;
     padding-top: 10%;
 `
+
+export { name };

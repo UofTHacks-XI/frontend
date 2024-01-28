@@ -1,17 +1,21 @@
-import React from "react";
+import React, {useState} from "react";
 // import { View, Text } from 'react-native';
 import styled from 'styled-components/native';
 import { Link } from 'expo-router';
 import CarouselComponent from "../carousel";
 import FontAwesome6  from 'react-native-vector-icons/FontAwesome6'
 import { imgexp } from "../navbar";
+import {dateN, eventN, locationN} from './homepage'
 import { TouchableOpacity } from 'react-native';
 import * as Linking from "expo-linking";
+import {Text, TextInput, View} from 'react-native';
+
 
 
 export default function MemoryView() {
-    let albumname: string = "Beach Days";
-    let albumdate: string = "2023 June 27th";
+    let albumname: string = eventN;
+    let albumdate: string = dateN;
+    let albumlocation: string = locationN;
     let photos: any[] = [];
 
     if (imgexp) console.log(imgexp.lng, imgexp.lat);
@@ -26,7 +30,7 @@ export default function MemoryView() {
     ];
 
     const handleButtonPress = () => {
-        const server: string = "https://100.65.3.231:8080/";
+        const server: string = "https://100.65.4.49:8080/";
         console.log(`${server}?lng=${imgexp.lng}&lat=${imgexp.lat}`);
         Linking.openURL(`${server}?lng=${imgexp.lng}&lat=${imgexp.lat}`);
     };
@@ -35,7 +39,7 @@ export default function MemoryView() {
         <MainContainer>
             <ContentContainer>  
                 <BackButtonMasterContainer>
-                    <Link href = './homepage'>
+                    <Link replace href = './homepage'>
                         <BackButtonContainer>
                             <BackButtonText>Back</BackButtonText>
                         </BackButtonContainer>
@@ -44,7 +48,7 @@ export default function MemoryView() {
 
                 <Date> 
                     <TextTitle>{albumname}</TextTitle>
-                    <TextDate>{albumdate}</TextDate>
+                    <TextDate>{albumlocation} - {albumdate}</TextDate>
                 </Date>
 
                 {/* Render your photos here */}
@@ -100,6 +104,11 @@ const TextDate = styled.Text`
     opacity: 0.4;
 `
 
+// const TextLocation = styled.Text`
+//     font-size: 16px;
+//     opacity: 0.4;
+// `
+
 const BackButtonMasterContainer = styled.View`
     position: relative;
     left: 15px;
@@ -111,9 +120,9 @@ const BackButtonContainer = styled.View`
     transition: 0.375s;
     align-items: center;
     background-color: white;
-    border-radius: 20px;
+    border-radius: 15px;
     width: 78px;
-    height: 43px;
+    height: 40px;
     justify-content: center;
 `
 

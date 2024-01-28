@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 
-import { launchImageLibrary } from "react-native-image-picker";
+
+// import { launchImageLibrary } from "react-native-image-picker";
 import styled from 'styled-components/native';
 
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -28,6 +30,10 @@ const NavBar: React.FC = () => {
     setIsButtonActive(!isButtonActive);
   };
 
+  //navigation 
+  const navigation = useNavigation();
+
+
   const uploadImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -44,10 +50,19 @@ const NavBar: React.FC = () => {
         // Ignore errors
         lat: (data.GPUSLatitudeRef !== "N" ? 1 : -1) * data.GPSLatitude,
         lng: (data.GPUSLongitudeRef === "E" ? 1 : -1) * data.GPSLongitude,
+
+        //reload page with potential new image
       };
+      
       // console.log(result.assets[0].exif);
       setimg(output);
       imgexp = output;
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: '(tabs)/homepage' }],
+      });
+
     }
   }
   
@@ -90,11 +105,11 @@ const NavBar: React.FC = () => {
 
           <IconContainer>
             <TouchableOpacity>
-              <Link href = "/(tabs)/memory_pano">
+              {/* <Link href = "/(tabs)/memory_pano"> */}
               <Icons>
                 <MaterialIcons name="settings" size={25} color="black" /> 
               </Icons>
-              </Link>
+              {/* </Link> */}
             </TouchableOpacity>
             <IconText>settings</IconText>
           </IconContainer>

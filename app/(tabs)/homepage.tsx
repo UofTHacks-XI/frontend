@@ -1,8 +1,16 @@
 import styled from 'styled-components/native';
-import { View, Text, ScrollView, AppRegistry } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, Text, ScrollView, AppRegistry, Image } from 'react-native';
 import NavBar from '../navbar';
 import { Link } from 'expo-router';
+import  { name }  from './index';
 // import { Image } from 'react-native';
+import {StyleSheet, TextInput} from 'react-native';
+import { imgexp } from '../navbar'
+
+
+
+
 
 const images = {
     beach: require("../../assets/images/beach_memories.png"),
@@ -11,7 +19,26 @@ const images = {
 }
 
 export default function HomePage() {
-    let username: string = "Carl";
+    let username: string = name;
+
+    const [imageUri, setImageUri] = useState(null);
+    const [dynamicImageUri, setDynamicImageUri] = useState(null);
+
+    useEffect(() => {
+        // Assuming imgexp is an object with a valid URI property
+        if (imgexp && imgexp.uri) {
+          setDynamicImageUri({ uri: imgexp.uri });
+        } else {
+          // Placeholder image source or fallback
+          setDynamicImageUri(require("../../assets/images/beach_memories.png"));
+        }
+    
+        // Set the URI to the state
+        setImageUri(dynamicImageUri);
+      }, [imgexp]); // Add imgexp as a dependency
+    
+
+
     return (
         <>
             <ScrollView>
@@ -19,11 +46,7 @@ export default function HomePage() {
                     <WelcomeTitle username={username} />
                     
 
-                    <AlbumContainer>
-                      <AlbumEntry key={1} pictures={images.beach} albumdata={{ name: "Awesome Beach Days", location: "Thunder Bay, ON", date: "June 23rd, 2023" }} />
-                    </AlbumContainer>
-
-
+                    {dynamicImageUri && <AlbumEntryTest key={1} pictures={dynamicImageUri} />}
                     <AlbumEntry key={2} pictures={images.mountain} albumdata={{ name: "Vancouver Mounts!", location: "Victoria, BC", date: "May 15th, 2023" }} />
                     <AlbumEntry key={3} pictures={images.aprilfools} albumdata={{ name: "April Fools", location: "Thunder Bay, ON", date: "Apr 1st" }} />
                 </MainContainer>
@@ -70,6 +93,8 @@ function WelcomeTitle({ username }: WelcomeTitleProps) {
 // ======================================================== Albums Entry
 
 interface AlbumEntryProps { albumdata: object; pictures: any; }
+interface AlbumEntryPropsTest { pictures: any; }
+
 interface AlbumPictureProps { pictures: any; }
 interface AlbumTextProps { albumdata: object; }
 function AlbumEntry({ pictures, albumdata }: AlbumEntryProps) {
@@ -77,6 +102,13 @@ function AlbumEntry({ pictures, albumdata }: AlbumEntryProps) {
         <AlbumPair>
             <AlbumPictures pictures={pictures} />
             <AlbumText albumdata={albumdata} />
+        </AlbumPair>
+    );
+} function AlbumEntryTest({ pictures }: AlbumEntryPropsTest) {
+    return (
+        <AlbumPair>
+            <AlbumPictures pictures={pictures} />
+            <AlbumTextTest />
         </AlbumPair>
     );
 } function AlbumPictures({ pictures }: AlbumPictureProps) {
@@ -91,12 +123,80 @@ function AlbumEntry({ pictures, albumdata }: AlbumEntryProps) {
         </View>
         */
     );
-} function AlbumText({ albumdata }: AlbumTextProps) {
+
+} 
+let eventN = '';
+let locationN = '';
+let dateN = '';
+
+function AlbumTextTest() {
+
+    const [textEvent, onChangeEvent] = React.useState('');
+    const [textLocation, onChangeLocation] = React.useState('');
+    const [textDate, onChangeDate] = React.useState('');
+
+    eventN = textEvent;
+    locationN = textLocation;
+    dateN = textDate
+
     return (
 
         <MasterContainer>
         
         <AlbumView>
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeEvent}
+                value={textEvent}
+                placeholder="Event Name"
+                placeholderTextColor={`rgba(0, 0, 0, 0.40)`}
+            />
+
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeLocation}
+                value={textLocation}
+                placeholder="Location"
+                placeholderTextColor={`rgba(0, 0, 0, 0.40)`}
+            />
+
+            <TextInput
+                style={styles.input}
+                onChangeText={onChangeDate}
+                value={textDate}
+                placeholder="Date"
+                placeholderTextColor={`rgba(0, 0, 0, 0.40)`}
+            />  
+            
+           
+
+        </AlbumView>
+
+
+
+        <Container>
+        <Link href = './memory_view'>
+                  <BackButtonContainer>
+                      <BackButtonText>View</BackButtonText>
+                  </BackButtonContainer>
+        </Link>
+        </Container>
+
+        
+
+        </MasterContainer>
+
+
+    );
+} function AlbumText({ albumdata }: AlbumTextProps) {
+
+    return (
+
+        <MasterContainer>
+        
+        <AlbumView>
+            
+            
             {albumdata && <AlbumTextName>{albumdata?.name}</AlbumTextName>}
             {albumdata && <AlbumTextLocation>{albumdata?.location}</AlbumTextLocation>}
             {albumdata && <AlbumTextDate>{albumdata?.date}</AlbumTextDate>}
@@ -120,7 +220,23 @@ function AlbumEntry({ pictures, albumdata }: AlbumEntryProps) {
 
 
     );
-} 
+}
+
+const styles = StyleSheet.create({
+    input: {
+      margin: 0,
+      padding: 10,
+      height: 40,
+    //borderBottomWidth: 1,
+    
+    },
+
+    image: {
+        width: 200,
+        height: 200,
+        resizeMode: 'cover',
+      },
+  });
 
 
 const AlbumView = styled.View`
@@ -151,19 +267,21 @@ const AlbumPair = styled.View`
 const AlbumTextName = styled.Text`
     position: absolute;
     top: 18px;
-    left: 22px;
+    left: 15px;
+    /* border: 1px solid blue;
+    border-bottom-width: 1px; */
 `
 
 const AlbumTextLocation = styled.Text`
     position: absolute;
     top: 54px;
-    left: 22px;
+    left: 15px;
 `
 
 const AlbumTextDate = styled.Text`
     position: absolute;
     top: 90px;
-    left: 22px;
+    left: 15px;
 `
 
 // const Lines = styled.View`
@@ -171,9 +289,9 @@ const AlbumTextDate = styled.Text`
 //     margin: 24px 0 0 20px;
 // `
 
-const AlbumContainer = styled.View`
-  display: flex;
-`
+// const AlbumContainer = styled.View`
+//   display: flex;
+// `
 
 
 const MasterContainer = styled.View`
@@ -203,6 +321,11 @@ const BackButtonText = styled.Text`
 `
 const Container = styled.View`
   padding-left: 20px;
+  position: relative;
+  top: 10px;
+  right: 10px;
 
 
 `
+
+export {dateN, locationN, eventN}; 

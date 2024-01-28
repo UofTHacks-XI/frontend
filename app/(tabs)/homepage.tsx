@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import React, {useState, useEffect} from 'react';
-import { View, Text, ScrollView, AppRegistry, Image } from 'react-native';
+import { View, Text, ScrollView, AppRegistry } from 'react-native';
 import NavBar from '../navbar';
 import { Link } from 'expo-router';
 import  { name }  from './index';
@@ -21,7 +21,7 @@ const images = {
 export default function HomePage() {
     let username: string = name;
 
-    const [imageUri, setImageUri] = useState(null);
+    // const [imageUri, setImageUri] = useState(null);
     const [dynamicImageUri, setDynamicImageUri] = useState(null);
 
     useEffect(() => {
@@ -34,8 +34,8 @@ export default function HomePage() {
         }
     
         // Set the URI to the state
-        setImageUri(dynamicImageUri);
-      }, [imgexp]); // Add imgexp as a dependency
+        // setImageUri(dynamicImageUri);
+    }, [imgexp]); // Add imgexp as a dependency
     
 
 
@@ -253,6 +253,7 @@ const AlbumView = styled.View`
 const AlbumImage = styled.Image`
     width: auto;
     height: 200px;
+    border-radius: 8px;
 `
 
 const AlbumPair = styled.View`
